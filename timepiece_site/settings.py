@@ -26,11 +26,7 @@ SECRET_KEY = 'django-insecure-q+!*c2obe(^970k6h5!)^5aey9pj@vjua36)f=e$^*v43(6kqv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    "fb5dbe2baa5f.ngrok-free.app",
-]
+ALLOWED_HOSTS = [".onrender.com"]
 
 TELEGRAM_ADMIN_IDS = [6746524257]
 
