@@ -8,11 +8,10 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "unsafe-secret")
 
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [
-    ".onrender.com",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS",
+    ".onrender.com localhost 127.0.0.1"
+).split()
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -61,7 +60,12 @@ DATABASES = {
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    }
+}
+
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = "/var/data/media"   # ← КРИТИЧНО
