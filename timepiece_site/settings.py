@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-q+!*c2obe(^970k6h5!)^5aey9pj@vjua36)f=e$^*v43(6kqv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [".onrender.com"]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", ".onrender.com localhost 127.0.0.1").split()
 
 TELEGRAM_ADMIN_IDS = [6746524257]
 
@@ -50,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = 'timepiece_site.urls'
