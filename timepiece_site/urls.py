@@ -17,7 +17,7 @@ urlpatterns = [
     path("telegram/webhook/", catalog_views.telegram_webhook, name="telegram_webhook"),
     path("telegram/webhook/", telegram_webhook, name="telegram_webhook"),
     path("", include("catalog.urls")),
+    
 ]
-
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
