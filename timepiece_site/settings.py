@@ -111,3 +111,6 @@ CORS_ALLOWED_ORIGINS = [
     "https://*.vercel.app",
 ]
 CORS_ALLOW_CREDENTIALS = True
+LOGIN_REDIRECT_URL = "/account/"
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = "/login/"
