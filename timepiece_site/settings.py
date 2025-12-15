@@ -4,17 +4,26 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-change-this-in-prod-1234567890")
+# =========================
+# Security / Env
+# =========================
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY",
+    "django-insecure-change-this-in-prod-1234567890"
+)
 
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = [
-    ".onrender.com",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1,.onrender.com"
+).split(",")
 
+# =========================
+# Apps
+# =========================
 INSTALLED_APPS = [
+    "corsheaders",  # ✅ для запросов с Vercel
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -24,9 +33,14 @@ INSTALLED_APPS = [
     "catalog",
 ]
 
+# =========================
+# Middleware
+# =========================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",  # ✅ важно: выше CommonMiddleware
     "whitenoise.middleware.WhiteNoiseMiddleware",
+
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -37,6 +51,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "timepiece_site.urls"
 
+# =========================
+# Templates
+# =========================
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -55,13 +72,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "timepiece_site.wsgi.application"
 
+# =========================
+# Database
+# =========================
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
     )
 }
 
-# Static files
+# =========================
+# Static / Media
+# =========================
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
@@ -69,7 +91,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "catalog" / "static",
 ]
 
-# Media files
 MEDIA_URL = "/media/"
 MEDIA_ROOT = "/var/data/media"
 
@@ -77,3 +98,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = "/account/"
 LOGOUT_REDIRECT_URL = "/"
+
+# =========================
+# CSRF / CORS (Vercel <-> Render)
+# =========================
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.vercel.app",
+    "https://*.onrender.com",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://*.vercel.app",
+]
+CORS_ALLOW_CREDENTIALS = True
