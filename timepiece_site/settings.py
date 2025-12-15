@@ -14,10 +14,10 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = os.environ.get(
+ALLOWED_HOSTS = [h.strip() for h in os.environ.get(
     "ALLOWED_HOSTS",
     "localhost,127.0.0.1,.onrender.com"
-).split(",")
+).split(",") if h.strip()]
 
 # =========================
 # Apps
