@@ -4,9 +4,9 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-change-this-in-prod-1234567890")
 
-DEBUG = os.environ.get("DEBUG") == "True"
+DEBUG = True
 
 ALLOWED_HOSTS = [
     ".onrender.com",
@@ -65,6 +65,9 @@ DATABASES = {
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_DIRS = [
+    BASE_DIR / "catalog" / "static",
+]
 
 # Media files
 MEDIA_URL = "/media/"

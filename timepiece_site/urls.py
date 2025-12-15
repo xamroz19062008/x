@@ -14,6 +14,9 @@ urlpatterns = [
     path("telegram/webhook/", views.telegram_webhook, name="telegram_webhook"),
 
     path("", include("catalog.urls")),
+    path("api/orders/create/", views.api_create_order, name="api_create_order"),
+    path("account/", views.account, name="account"),
+    path("", include("django.contrib.auth.urls")),
 ]
 
 # ⚠️ MEDIA ДОЛЖНЫ ОТДАВАТЬСЯ ВСЕГДА

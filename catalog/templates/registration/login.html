@@ -4,16 +4,24 @@
   <head>
     <meta charset="UTF-8" />
     <title>Войти — TIMEPIECE</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Правильное подключение статики Django -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
+
   <body>
+    {% comment %} Это Django-шаблон: хранить на backend (Render).
+    Каталог/корзина у тебя на Vercel — ссылки ведём на frontend-домен. Поменяй
+    домен ниже на свой. {% endcomment %} {% with
+    FRONTEND_BASE="https://YOUR_VERCEL_DOMAIN.vercel.app" %}
     <header class="header glass-panel">
       <div class="container header-inner">
-        <a href="/" class="logo">TIMEPIECE</a>
+        <a href="{{ FRONTEND_BASE }}/index.html" class="logo">TIMEPIECE</a>
+
         <nav class="nav">
-          <a href="/catalog/">Каталог</a>
-          <a href="/cart/">Корзина</a>
+          <a href="{{ FRONTEND_BASE }}/catalog.html">Каталог</a>
+          <a href="{{ FRONTEND_BASE }}/cart.html">Корзина</a>
         </nav>
       </div>
     </header>
@@ -26,7 +34,7 @@
         >
           <h1 class="section-title">Войти</h1>
 
-          <form method="post">
+          <form method="post" action="{% url 'login' %}">
             {% csrf_token %} {{ form.as_p }}
 
             <button class="btn btn-primary" type="submit">Войти</button>
@@ -39,5 +47,6 @@
         </div>
       </div>
     </main>
+    {% endwith %}
   </body>
 </html>

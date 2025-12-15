@@ -325,6 +325,55 @@ def checkout(request):
 # =========================
 # Telegram Webhook: кнопки + архив
 # =========================
+@csrf_exempt
+def api_create_order(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Only POST allowed"}, status=405)
+
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except Exception:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+    location = (data.get("location") or "").strip()
+    phone = (data.get("phone") or "").strip()
+    latitude = data.get("latitude")
+    longitude = data.get("longitude")
+    items = data.get("items") or []
+
+    if not location or not phone or latitude is None or longitude is None or not items:
+        return JsonResponse({"error": "Missing fields"}, status=400)
+
+    # создаём заказ (если пользователь залогинен на backend — привяжется, иначе None)
+    order = Order.objects.create(
+        user=request.user if request.user.is_authenticated else None,
+        location=location,
+        phone=phone,
+        latitude=float(latitude),
+        longitude=float(longitude),
+        status="waiting",
+    )
+
+    # items ожидаем вида: [{id, price, quantity, ...}, ...]
+    for it in items:
+        watch_id = it.get("id")
+        price = it.get("price", 0)
+        quantity = it.get("quantity", 1)
+
+        if not watch_id:
+            continue
+
+        OrderItem.objects.create(
+            order=order,
+            watch_id=watch_id,   # важно: watch_id, потому что у тебя ForeignKey watch
+            quantity=int(quantity),
+            price=int(price),
+        )
+
+    # отправка в Telegram (как у тебя уже сделано)
+    send_order_to_telegram(order, request)
+
+    return JsonResponse({"success": True, "order_id": order.id})
 
 def _is_admin_telegram_update(update: dict) -> bool:
     admin_ids = getattr(settings, "TELEGRAM_ADMIN_IDS", [])
@@ -527,15 +576,17 @@ def payment_callback(request):
 
 @login_required
 def account(request):
-    orders = (
-        Order.objects
-        .filter(user=request.user)
-        .prefetch_related("items__watch")
-        .order_by("-created_at")
-    )
-    return render(request, "account.html", {"user": request.user, "orders": orders})
+    orders = Order.objects.filter(user=request.user).order_by("-created_at")
+    return render(request, "account.html", {
+        "orders": orders,
+    })
+
 
 
 def logout_view(request):
     logout(request)
     return redirect("index")
+
+def index(request):
+    return redirect("https://YOUR_VERCEL_DOMAIN.vercel.app/index.html")
+
