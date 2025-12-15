@@ -4,14 +4,15 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY", "unsafe-secret")
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = os.environ.get("DEBUG") == "True"
 
-ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS",
-    ".onrender.com localhost 127.0.0.1"
-).split()
+ALLOWED_HOSTS = [
+    ".onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -55,20 +56,19 @@ TEMPLATES = [
 WSGI_APPLICATION = "timepiece_site.wsgi.application"
 
 DATABASES = {
-    "default": dj_database_url.config(default=f"sqlite:///{BASE_DIR/'db.sqlite3'}")
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+    )
 }
 
+# Static files
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    }
-}
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-
+# Media files
 MEDIA_URL = "/media/"
-MEDIA_ROOT = "/var/data/media"   # ← КРИТИЧНО
+MEDIA_ROOT = "/var/data/media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

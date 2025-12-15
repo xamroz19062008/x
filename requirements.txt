@@ -11,4 +11,4 @@ gunicorn==23.0.0
 whitenoise==6.9.0
 dj-database-url==2.2.0
 psycopg2-binary==2.9.10; python_version < "3.14"
-
+psycopg2-binary
