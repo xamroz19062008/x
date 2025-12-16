@@ -10,16 +10,15 @@
   </head>
 
   <body>
-    {% comment %} Это Django-шаблон (Render). Каталог и корзина находятся на
-    Vercel, поэтому ссылки ведём на frontend-домен. {% endcomment %} {% with
-    FRONTEND_BASE="https://x-frontend-xi.vercel.app" %}
     <header class="header glass-panel">
       <div class="container header-inner">
-        <a href="{{ FRONTEND_BASE }}/index.html" class="logo">TIMEPIECE</a>
+        <a href="https://x-frontend-xi.vercel.app/index.html" class="logo"
+          >TIMEPIECE</a
+        >
 
         <nav class="nav">
-          <a href="{{ FRONTEND_BASE }}/catalog.html">Каталог</a>
-          <a href="{{ FRONTEND_BASE }}/cart.html">Корзина</a>
+          <a href="https://x-frontend-xi.vercel.app/catalog.html">Каталог</a>
+          <a href="https://x-frontend-xi.vercel.app/cart.html">Корзина</a>
         </nav>
       </div>
     </header>
@@ -35,7 +34,6 @@
           <form method="post" action="/signup/" class="auth-form">
             {% csrf_token %}
 
-            <!-- ЛОГИН -->
             <div class="form-row" style="margin-bottom: 16px">
               <label for="{{ form.username.id_for_label }}">Логин</label>
               {{ form.username }} {% if form.username.errors %}
@@ -43,7 +41,6 @@
               {% endif %}
             </div>
 
-            <!-- ПАРОЛЬ -->
             <div class="form-row" style="margin-bottom: 16px">
               <label for="{{ form.password1.id_for_label }}">Пароль</label>
               {{ form.password1 }} {% if form.password1.errors %}
@@ -51,17 +48,15 @@
               {% endif %}
             </div>
 
-            <!-- ПОДТВЕРЖДЕНИЕ ПАРОЛЯ -->
             <div class="form-row" style="margin-bottom: 16px">
-              <label for="{{ form.password2.id_for_label }}">
-                Повторите пароль
-              </label>
+              <label for="{{ form.password2.id_for_label }}"
+                >Повторите пароль</label
+              >
               {{ form.password2 }} {% if form.password2.errors %}
               <div class="field-error">{{ form.password2.errors }}</div>
               {% endif %}
             </div>
 
-            <!-- Общие ошибки формы -->
             {% if form.non_field_errors %}
             <div class="form-error-global">{{ form.non_field_errors }}</div>
             {% endif %}
@@ -82,6 +77,5 @@
         </div>
       </div>
     </main>
-    {% endwith %}
   </body>
 </html>
