@@ -6,34 +6,31 @@
     <title>Мой аккаунт — TIMEPIECE</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Django static -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
 
   <body>
+    {% comment %} Это Django-шаблон (Render). Каталог/корзина у вас на Vercel —
+    ссылки ведём на frontend-домен. {% endcomment %} {% with
+    FRONTEND_BASE="https://x-frontend-xi.vercel.app" %}
     <header class="header glass-panel">
       <div class="container header-inner">
-        <a href="/" class="logo">TIMEPIECE</a>
+        <a href="{{ FRONTEND_BASE }}/index.html" class="logo">TIMEPIECE</a>
 
         <nav class="nav">
-          <a href="/catalog/">Каталог</a>
-          <a href="/cart/">Корзина</a>
+          <a href="{{ FRONTEND_BASE }}/catalog.html">Каталог</a>
+          <a href="{{ FRONTEND_BASE }}/cart.html">Корзина</a>
         </nav>
 
         <div class="auth-links">
           {% if user.is_authenticated %}
-          <span class="mono" style="margin-right: 16px">
-            {{ user.username }}
-          </span>
+          <span class="mono" style="margin-right: 16px"
+            >{{ user.username }}</span
+          >
           <a href="{% url 'logout' %}">Выйти</a>
           {% else %}
           <a href="{% url 'login' %}">Войти</a>
-          {% url 'signup' as signup_url %}
-          <a
-            href="{% if signup_url %}{{ signup_url }}{% else %}/signup/{% endif %}"
-          >
-            Регистрация
-          </a>
+          <a href="/signup/">Регистрация</a>
           {% endif %}
         </div>
       </div>
@@ -44,16 +41,17 @@
         <div class="glass-panel" style="padding: 32px">
           <h1 class="section-title">Мой аккаунт</h1>
 
+          {% if user.is_authenticated %}
           <p><strong>Логин:</strong> {{ user.username }}</p>
 
-          {% if user.is_authenticated and user.profile %} {% if
-          user.profile.phone %}
-          <p><strong>Телефон:</strong> {{ user.profile.phone }}</p>
-          {% endif %} {% if user.profile.location %}
-          <p><strong>Локация:</strong> {{ user.profile.location }}</p>
+          {# безопасно получаем профиль, даже если его нет #} {% with
+          profile=user|attr:"profile" %} {% if profile %} {% if profile.phone %}
+          <p><strong>Телефон:</strong> {{ profile.phone }}</p>
+          {% endif %} {% if profile.location %}
+          <p><strong>Локация:</strong> {{ profile.location }}</p>
           {% endif %} {% else %}
           <p style="opacity: 0.7">Профиль пользователя не заполнен</p>
-          {% endif %}
+          {% endif %} {% endwith %}
 
           <h2 class="section-title" style="margin-top: 24px">Мои заказы</h2>
 
@@ -66,9 +64,9 @@
             >
               <p>
                 <strong>Заказ #{{ order.id }}</strong> —
-                <span class="order-status">
-                  Статус: {{ order.get_status_display }}
-                </span>
+                <span class="order-status"
+                  >Статус: {{ order.get_status_display }}</span
+                >
               </p>
 
               <p>Создан: {{ order.created_at }}</p>
@@ -76,11 +74,11 @@
               <p>Телефон: {{ order.phone }}</p>
               <p>Сумма: {{ order.total_amount }} сум</p>
 
-              {% if order.items.exists %}
+              {% with items=order.items.all %} {% if items %}
               <div class="order-products" style="margin-top: 14px">
                 <p style="margin-bottom: 10px"><strong>Товары:</strong></p>
 
-                {% for item in order.items.all %}
+                {% for item in items %}
                 <div
                   style="
                     display: flex;
@@ -112,7 +110,9 @@
                   {% endif %}
 
                   <div>
-                    <strong>{{ item.watch.name|default:"Товар" }}</strong>
+                    <div>
+                      <strong>{{ item.watch.name|default:"Товар" }}</strong>
+                    </div>
                     <div style="font-size: 14px; opacity: 0.8">
                       {{ item.quantity }} шт · {{ item.price }} {{
                       item.watch.currency }}
@@ -121,15 +121,19 @@
                 </div>
                 {% endfor %}
               </div>
-              {% endif %}
+              {% endif %} {% endwith %}
             </li>
             {% endfor %}
           </ul>
           {% else %}
           <p>У вас пока нет заказов.</p>
+          {% endif %} {% else %}
+          <p>Сначала войдите в аккаунт.</p>
+          <p><a href="/accounts/login/">Перейти к входу</a></p>
           {% endif %}
         </div>
       </div>
     </main>
+    {% endwith %}
   </body>
 </html>

@@ -4,13 +4,14 @@
   <head>
     <meta charset="UTF-8" />
     <title>Регистрация — TIMEPIECE</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
 
   <body>
-    {% comment %} Это Django-шаблон (Render). Каталог/корзина у вас на Vercel,
-    поэтому ссылки ведём на домен фронта. {% endcomment %} {% with
+    {% comment %} Это Django-шаблон (Render). Каталог и корзина находятся на
+    Vercel, поэтому ссылки ведём на frontend-домен. {% endcomment %} {% with
     FRONTEND_BASE="https://x-frontend-xi.vercel.app" %}
     <header class="header glass-panel">
       <div class="container header-inner">
@@ -31,12 +32,7 @@
         >
           <h1 class="section-title" style="margin-bottom: 24px">Регистрация</h1>
 
-          {% url 'signup' as signup_url %}
-          <form
-            method="post"
-            action="{% if signup_url %}{{ signup_url }}{% else %}/signup/{% endif %}"
-            class="auth-form"
-          >
+          <form method="post" action="/signup/" class="auth-form">
             {% csrf_token %}
 
             <!-- ЛОГИН -->
@@ -57,9 +53,9 @@
 
             <!-- ПОДТВЕРЖДЕНИЕ ПАРОЛЯ -->
             <div class="form-row" style="margin-bottom: 16px">
-              <label for="{{ form.password2.id_for_label }}"
-                >Повторите пароль</label
-              >
+              <label for="{{ form.password2.id_for_label }}">
+                Повторите пароль
+              </label>
               {{ form.password2 }} {% if form.password2.errors %}
               <div class="field-error">{{ form.password2.errors }}</div>
               {% endif %}
@@ -80,11 +76,8 @@
           </form>
 
           <p style="margin-top: 16px">
-            Уже есть аккаунт? {% url 'login' as login_url %}
-            <a
-              href="{% if login_url %}{{ login_url }}{% else %}/accounts/login/{% endif %}"
-              >Войти</a
-            >
+            Уже есть аккаунт?
+            <a href="/accounts/login/">Войти</a>
           </p>
         </div>
       </div>
