@@ -10,16 +10,15 @@
   </head>
 
   <body>
-    {% comment %} Это Django-шаблон (Render). Каталог/корзина на Vercel — ссылки
-    ведём на frontend домен. {% endcomment %} {% with
-    FRONTEND_BASE="https://x-frontend-xi.vercel.app" %}
     <header class="header glass-panel">
       <div class="container header-inner">
-        <a href="{{ FRONTEND_BASE }}/index.html" class="logo">TIMEPIECE</a>
+        <a href="https://x-frontend-xi.vercel.app/index.html" class="logo">
+          TIMEPIECE
+        </a>
 
         <nav class="nav">
-          <a href="{{ FRONTEND_BASE }}/catalog.html">Каталог</a>
-          <a href="{{ FRONTEND_BASE }}/cart.html">Корзина</a>
+          <a href="https://x-frontend-xi.vercel.app/catalog.html">Каталог</a>
+          <a href="https://x-frontend-xi.vercel.app/cart.html">Корзина</a>
         </nav>
       </div>
     </header>
@@ -45,6 +44,5 @@
         </div>
       </div>
     </main>
-    {% endwith %}
   </body>
 </html>
