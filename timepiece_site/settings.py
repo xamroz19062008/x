@@ -12,7 +12,7 @@ SECRET_KEY = os.environ.get(
     "django-insecure-change-this-in-prod-1234567890"
 )
 
-DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+DEBUG = True
 
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get(
     "ALLOWED_HOSTS",
@@ -57,7 +57,7 @@ ROOT_URLCONF = "timepiece_site.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [],  # или [BASE_DIR / "templates"] если у вас общий templates
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -69,6 +69,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = "timepiece_site.wsgi.application"
 
