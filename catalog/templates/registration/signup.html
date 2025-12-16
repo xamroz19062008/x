@@ -68,9 +68,9 @@
             <!-- ТЕЛЕФОН -->
             <div class="form-row" style="margin-bottom: 24px">
               <label for="{{ form.phone.id_for_label }}">Телефон (необязательно)</label>
-              {{ form.phone }}
+              {% comment %} {{ form.phone }} {% endcomment %}
               {% if form.phone.errors %}
-              <div class="field-error">{{ form.phone.errors }}</div>
+              {% comment %} <div class="field-error">{{ form.phone.errors }}</div> {% endcomment %}
               {% endif %}
             </div>
 

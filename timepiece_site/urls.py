@@ -2,6 +2,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import path, include
+from catalog import views as catalog_views
 from catalog import views
 
 urlpatterns = [
@@ -20,7 +23,8 @@ urlpatterns = [
     # Твои API
     path("api/orders/create/", views.api_create_order, name="api_create_order"),
     path("telegram/webhook/", views.telegram_webhook, name="telegram_webhook"),
-
+    path("signup/", catalog_views.signup_view, name="signup"),
+    path("account/", catalog_views.account_view, name="account"),
     # Каталог
     path("", include("catalog.urls")),
 ]
