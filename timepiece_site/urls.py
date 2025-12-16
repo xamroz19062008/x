@@ -2,31 +2,26 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib import admin
-from django.urls import path, include
-from catalog import views as catalog_views
-from catalog import views
+
+from catalog import views  # один импорт, без дублей
 
 urlpatterns = [
     path("admin/", admin.site.urls),
 
-    # ТВОЯ регистрация (кастомная)
-    path("signup/", views.signup, name="signup"),
-
-    # Django auth (login/logout/password...)
-    # ВАЖНО: подключаем ОДИН раз и под /accounts/
+    # Django auth (login/logout/password reset...)
     path("accounts/", include("django.contrib.auth.urls")),
 
-    # Твои страницы
+    # Ваша регистрация и аккаунт (оставляем ваши основные view)
+    path("signup/", views.signup, name="signup"),
     path("account/", views.account, name="account"),
 
-    # Твои API
-    path("api/orders/create/", views.api_create_order, name="api_create_order"),
+    # API + остальные пути из catalog/urls.py
+    # (после исправления catalog/urls.py у вас здесь будут /api/watches/all/ и т.д.)
+    path("api/", include("catalog.urls")),
+
+    # Если webhook нужен именно по этому адресу — оставляем
+    # (НО: если он уже есть внутри catalog/urls.py, то это дублирование)
     path("telegram/webhook/", views.telegram_webhook, name="telegram_webhook"),
-    path("signup/", catalog_views.signup_view, name="signup"),
-    path("account/", catalog_views.account_view, name="account"),
-    # Каталог
-    path("", include("catalog.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
