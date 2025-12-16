@@ -6,15 +6,14 @@
     <title>Войти — TIMEPIECE</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Правильное подключение статики Django -->
+    <!-- CSS Django static -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
 
   <body>
-    {% comment %} Это Django-шаблон: хранить на backend (Render).
-    Каталог/корзина у тебя на Vercel — ссылки ведём на frontend-домен. Поменяй
-    домен ниже на свой. {% endcomment %} {% with
-    FRONTEND_BASE="https://YOUR_VERCEL_DOMAIN.vercel.app" %}
+    {% comment %} Это Django-шаблон (Render). Каталог/корзина на Vercel, поэтому
+    ссылки ведём на домен фронта. {% endcomment %} {% with
+    FRONTEND_BASE="https://x-frontend-xi.vercel.app" %}
     <header class="header glass-panel">
       <div class="container header-inner">
         <a href="{{ FRONTEND_BASE }}/index.html" class="logo">TIMEPIECE</a>
@@ -41,8 +40,12 @@
           </form>
 
           <p style="margin-top: 12px">
-            Нет аккаунта?
-            <a href="{% url 'signup' %}">Зарегистрироваться</a>
+            Нет аккаунта? {# Безопасно: не падает, если signup URL ещё не
+            настроен #} {% url 'signup' as signup_url %} {% if signup_url %}
+            <a href="{{ signup_url }}">Зарегистрироваться</a>
+            {% else %}
+            <a href="/signup/">Зарегистрироваться</a>
+            {% endif %}
           </p>
         </div>
       </div>
