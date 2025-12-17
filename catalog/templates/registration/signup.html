@@ -4,21 +4,21 @@
   <head>
     <meta charset="UTF-8" />
     <title>Регистрация — TIMEPIECE</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
 
   <body>
+    {% comment %} Это Django-шаблон (Render). Каталог/корзина у вас на Vercel,
+    поэтому ссылки ведём на домен фронта. {% endcomment %} {% with
+    FRONTEND_BASE="https://x-frontend-xi.vercel.app" %}
     <header class="header glass-panel">
       <div class="container header-inner">
-        <a href="https://x-frontend-xi.vercel.app/index.html" class="logo"
-          >TIMEPIECE</a
-        >
+        <a href="{{ FRONTEND_BASE }}/" class="logo">TIMEPIECE</a>
 
         <nav class="nav">
-          <a href="https://x-frontend-xi.vercel.app/catalog.html">Каталог</a>
-          <a href="https://x-frontend-xi.vercel.app/cart.html">Корзина</a>
+          <a href="{{ FRONTEND_BASE }}/catalog">Каталог</a>
+          <a href="{{ FRONTEND_BASE }}/cart">Корзина</a>
         </nav>
       </div>
     </header>
@@ -31,9 +31,15 @@
         >
           <h1 class="section-title" style="margin-bottom: 24px">Регистрация</h1>
 
-          <form method="post" action="/signup/" class="auth-form">
+          {% url 'signup' as signup_url %}
+          <form
+            method="post"
+            action="{% if signup_url %}{{ signup_url }}{% else %}/signup/{% endif %}"
+            class="auth-form"
+          >
             {% csrf_token %}
 
+            <!-- ЛОГИН -->
             <div class="form-row" style="margin-bottom: 16px">
               <label for="{{ form.username.id_for_label }}">Логин</label>
               {{ form.username }} {% if form.username.errors %}
@@ -41,6 +47,7 @@
               {% endif %}
             </div>
 
+            <!-- ПАРОЛЬ -->
             <div class="form-row" style="margin-bottom: 16px">
               <label for="{{ form.password1.id_for_label }}">Пароль</label>
               {{ form.password1 }} {% if form.password1.errors %}
@@ -48,6 +55,7 @@
               {% endif %}
             </div>
 
+            <!-- ПОДТВЕРЖДЕНИЕ ПАРОЛЯ -->
             <div class="form-row" style="margin-bottom: 16px">
               <label for="{{ form.password2.id_for_label }}"
                 >Повторите пароль</label
@@ -71,11 +79,15 @@
           </form>
 
           <p style="margin-top: 16px">
-            Уже есть аккаунт?
-            <a href="/accounts/login/">Войти</a>
+            Уже есть аккаунт? {% url 'login' as login_url %}
+            <a
+              href="{% if login_url %}{{ login_url }}{% else %}/accounts/login/{% endif %}"
+              >Войти</a
+            >
           </p>
         </div>
       </div>
     </main>
+    {% endwith %}
   </body>
 </html>

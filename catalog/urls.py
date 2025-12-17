@@ -6,10 +6,10 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("catalog/", views.catalog_page, name="catalog"),
 
-    # ✅ API часов (УБРАЛИ "api/" в начале, чтобы не было /api/api/...)
-    path("watches/hero/", views.hero_watch, name="hero_watch"),
-    path("watches/featured/", views.watches_featured, name="watches_featured"),
-    path("watches/all/", views.watches_all, name="watches_all"),
+    # API часов
+    path("api/watches/hero/", views.hero_watch, name="hero_watch"),
+    path("api/watches/featured/", views.watches_featured, name="watches_featured"),
+    path("api/watches/all/", views.watches_all, name="watches_all"),
 
     # корзина
     path("cart/", views.cart_detail, name="cart_detail"),
